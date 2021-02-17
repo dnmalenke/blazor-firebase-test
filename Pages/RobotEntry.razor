@@ -1,0 +1,41 @@
+﻿@page "/robotentry"
+
+@inject RobotService _robotService
+
+<EditForm Model="_newRobot" OnValidSubmit="SubmitRobot">
+    <div class="form-group row">
+        <label class="col-2">Robot Name: </label>
+        <div class="col-6">
+            <InputText class="form-control" @bind-Value="_newRobot.Name" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-2">Wins: </label>
+        <div class="col-6">
+            <InputNumber class="form-control" @bind-Value="_newRobot.WinCount" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-2">Ties: </label>
+        <div class="col-6">
+            <InputNumber class="form-control" @bind-Value="_newRobot.TieCount" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-2">Losses: </label>
+        <div class="col-6">
+            <InputNumber class="form-control" @bind-Value="_newRobot.LossCount" />
+        </div>
+    </div>
+</EditForm>
+
+
+@code {
+    Robot _newRobot = new Robot();
+
+
+    private async Task SubmitRobot()
+    {
+        await _robotService.AddRobot(_newRobot);
+    }
+}

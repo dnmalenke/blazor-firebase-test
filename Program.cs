@@ -1,8 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Blazor_Firebase_Test.Data;
+using Google.Cloud.Firestore;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,10 +18,17 @@ namespace Blazor_Firebase_Test
     {
         public static async Task Main(string[] args)
         {
+            Console.WriteLine(Directory.GetCurrentDirectory());
+
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("#app");
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+                       
+            FirestoreDb firestoreDb = await FirestoreDb.CreateAsync("blazor-firebase-test");
+           
+            builder.Services.AddSingleton(firestoreDb);
+            builder.Services.AddScoped<RobotService>();
 
             await builder.Build().RunAsync();
         }
