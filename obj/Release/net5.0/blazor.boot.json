@@ -195,11 +195,11 @@
       "mscorlib.dll": "sha256-OoIy6q8Z4O5iSevqVXHfYC14mo\/kaxz74ydYX19CiAA=",
       "netstandard.dll": "sha256-FbW0xcZkySFb6B8yBpUE8XmaiMacDVdXdN9GeDH6xu4=",
       "System.Private.CoreLib.dll": "sha256-AQbVm+Z+NByScjRZWDWQnNUk5PBVgwCSWPLQN4YxxZs=",
-      "Blazor Firebase Test.dll": "sha256-6eVUcgXD\/uxyzkDUJryJ1tZq2pkkLN319w2QrHDd2wY="
+      "Blazor Firebase Test.dll": "sha256-u4cWC5MUZ7fSMzoJsGtqGjQHVfoS4giBgx9oBYuObQQ="
     },
     "lazyAssembly": null,
     "pdb": {
-      "Blazor Firebase Test.pdb": "sha256-hMj4mqx2hue5O6Tqv9GO+zPzhbNI\/Cgm6Sen9zXXMX8="
+      "Blazor Firebase Test.pdb": "sha256-fPnMN0rYPVrfvCnKJ0AYYAEZDls2mSgMGhSn2fqluHQ="
     },
     "runtime": {
       "dotnet.timezones.blat": "sha256-rFG55cwkAnfHzxmxwBL2tTwfj8X8cjcSEAlco4bc1eo=",
