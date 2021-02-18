@@ -4,7 +4,7 @@ var firestoreFunctions = {
     initializeFirebase: function (token) {
 
         firebase.initializeApp({
-            apiKey: 'AIzaSyDiePojEfRnN87oycI3r4AXNvRPq2kvgyY',
+            apiKey: 'AIzaSyAZdDLPA1F1CuUgnk4FvQvMVOYZZNcYWm4',
             authDomain: 'blazor-firebase-test.firebaseapp.com',
             projectId: 'blazor-firebase-test'
         });
