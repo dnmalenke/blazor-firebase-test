@@ -1,5 +1,13 @@
 ﻿@inherits LayoutComponentBase
 
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using Blazored.SessionStorage
+
+@inject NavigationManager _navManager
+@inject AuthenticationStateProvider _authProvider
+@inject IJSRuntime _jsRuntime
+@inject ISessionStorageService _storageService
+
 <div class="page">
     <div class="sidebar">
         <NavMenu />
@@ -7,11 +15,47 @@
 
     <div class="main">
         <div class="top-row px-4">
-            <a href="http://blazor.net" target="_blank" class="ml-md-auto">About</a>
+            <LoginDisplay />
         </div>
 
         <div class="content px-4">
             @Body
+            @*<AuthorizeView>
+                <Authorized>
+                    @Body
+                </Authorized>
+                <NotAuthorized>
+                    @if (_navManager.Uri.Contains("authentication"))
+                    {
+                        @Body
+                    }
+                    else
+                    {
+                        <h1>Welcome!</h1>
+
+                        <p>Please Log In to Continue.</p>
+                    }
+                </NotAuthorized>
+            </AuthorizeView>*@
         </div>
     </div>
 </div>
+
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await _authProvider.GetAuthenticationStateAsync();
+        if (authState.User.Identity.IsAuthenticated)
+        {
+            var s = await _storageService.GetItemAsync<AuthenticationStorage>($"oidc.user:https://accounts.google.com/:{authState.User.Identity.AuthenticationType}");
+
+            await _jsRuntime.InvokeVoidAsync("firestoreFunctions.initializeFirebase", s.id_token);
+        }
+    }
+
+    public class AuthenticationStorage
+    {
+        public string id_token { get; set; }
+    }
+}

@@ -6,11 +6,11 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Blazor_Firebase_Test.Data;
-using Google.Cloud.Firestore;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Blazored.SessionStorage;
 
 namespace Blazor_Firebase_Test
 {
@@ -24,11 +24,16 @@ namespace Blazor_Firebase_Test
             builder.RootComponents.Add<App>("#app");
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-                       
-            FirestoreDb firestoreDb = await FirestoreDb.CreateAsync("blazor-firebase-test");
-           
-            builder.Services.AddSingleton(firestoreDb);
+
+            builder.Services.AddOidcAuthentication(options =>
+            {
+                builder.Configuration.Bind("Local", options.ProviderOptions);
+                options.ProviderOptions.DefaultScopes.Add("https://www.googleapis.com/auth/userinfo.email");
+            });
+
             builder.Services.AddScoped<RobotService>();
+
+            builder.Services.AddBlazoredSessionStorage();
 
             await builder.Build().RunAsync();
         }

@@ -3,22 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Blazor_Firebase_Test.Models;
-using Google.Cloud.Firestore;
+using Microsoft.JSInterop;
 
 namespace Blazor_Firebase_Test.Data
 {
     public class RobotService
     {
-        private readonly FirestoreDb _firestoreDb;
+        private readonly IJSRuntime _jSRuntime;
 
-        public RobotService(FirestoreDb firestoreDb)
+        public RobotService(IJSRuntime jsRuntime)
         {
-            _firestoreDb = firestoreDb;
+            _jSRuntime = jsRuntime;
         }
 
         public async Task AddRobot(Robot robot)
         {
-            await _firestoreDb.Collection("robots").AddAsync(robot);
+            await _jSRuntime.InvokeVoidAsync("firestoreFunctions.addRobot", robot);
         }
 
     }
