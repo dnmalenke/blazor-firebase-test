@@ -25,6 +25,10 @@
                     {
                         @Body
                     }
+                    else
+                    {
+                        <p>Logging in and initializing FireStore...</p>
+                    }
                 </Authorized>
                 <NotAuthorized>
                     @if (_navManager.Uri.Contains("authentication"))
@@ -43,7 +47,7 @@
     </div>
 </div>
 
-<BlazoredToasts />
+<BlazoredToasts Position="Blazored.Toast.Configuration.ToastPosition.BottomRight" />
 
 @code {
     private bool _firestoreInitialized = false;
