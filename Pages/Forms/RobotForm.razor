@@ -1,0 +1,101 @@
+﻿
+@inject RobotService _robotService
+@inject IToastService _toastService
+@inject AuthenticationStateProvider _authProvider
+
+@if (IsDeleting)
+{
+    <p>Are you sure you want to delete this robot?</p>
+    <button class="btn btn-primary ml-1" style="float:right;" @onclick="() => DeleteRobot()">Yes</button>
+    <button class="btn btn-secondary" style="float:right;" @onclick="() => ModalInstance.CancelAsync()">No</button>
+}
+else
+{
+    <EditForm Model="_newRobot" OnValidSubmit="SubmitRobot">
+        <div class="form-group row">
+            <label class="col-5">Robot Name: </label>
+            <div class="col-7">
+                <InputNumber class="form-control" @bind-Value="_newRobot.RobotNumber" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-5">Wins: </label>
+            <div class="col-7">
+                <InputNumber class="form-control" @bind-Value="_newRobot.WinCount" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-5">Ties: </label>
+            <div class="col-7">
+                <InputNumber class="form-control" @bind-Value="_newRobot.TieCount" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-5">Losses: </label>
+            <div class="col-7">
+                <InputNumber class="form-control" @bind-Value="_newRobot.LossCount" />
+            </div>
+        </div>
+        <button class="btn btn-primary" style="float:right;" type="submit">Submit</button>
+    </EditForm>
+}
+
+@code {
+    [CascadingParameter]
+    public BlazoredModalInstance ModalInstance { get; set; }
+
+    [Parameter]
+    public bool IsDeleting { get; set; } = false;
+
+    [Parameter]
+    public Robot InputRobot { get; set; }
+
+    private Robot _newRobot = new Robot();
+
+    protected override void OnInitialized()
+    {
+        if (!IsDeleting && InputRobot != null)
+        {
+            IMapper mapper = new MapperConfiguration(cfg => cfg.CreateMap<Robot, Robot>()).CreateMapper();
+
+            _newRobot = mapper.Map<Robot>(InputRobot);
+        }
+    }
+
+    private async Task SubmitRobot()
+    {
+        try
+        {
+            AuthenticationState authState = await _authProvider.GetAuthenticationStateAsync();
+
+            _newRobot.EnteredBy = authState.User.Identity.Name;
+            _newRobot.EnteredDate = DateTime.Now;
+
+            await _robotService.AddRobot(_newRobot);
+
+            _toastService.ShowSuccess("Robot successfully submitted!");
+        }
+        catch
+        {
+            _toastService.ShowError("Error submitting robot");
+        }
+
+        await ModalInstance.CloseAsync();
+    }
+
+    private async Task DeleteRobot()
+    {
+        try
+        {
+           await _robotService.DeleteRobot(InputRobot);
+
+            _toastService.ShowSuccess("Robot successfully deleted!");
+        }
+        catch
+        {
+            _toastService.ShowError("Error deleting robot");
+        }
+
+        await ModalInstance.CloseAsync();
+    }
+}

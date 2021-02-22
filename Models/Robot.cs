@@ -7,8 +7,7 @@ namespace Blazor_Firebase_Test.Models
 {
     public class Robot
     {
-        public string RobotId { get; set; }
-        public string Name { get; set; }
+        public int RobotNumber { get; set; }
         public int WinCount { get; set; }
         public int LossCount { get; set; }
         public int TieCount { get; set; }

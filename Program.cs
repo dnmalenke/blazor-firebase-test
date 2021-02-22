@@ -11,6 +11,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Blazored.SessionStorage;
+using Blazored.Toast;
+using Blazored.Modal;
 
 namespace Blazor_Firebase_Test
 {
@@ -34,6 +36,8 @@ namespace Blazor_Firebase_Test
             builder.Services.AddScoped<RobotService>();
 
             builder.Services.AddBlazoredSessionStorage();
+            builder.Services.AddBlazoredToast();
+            builder.Services.AddBlazoredModal();
 
             await builder.Build().RunAsync();
         }

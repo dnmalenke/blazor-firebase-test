@@ -21,5 +21,14 @@ namespace Blazor_Firebase_Test.Data
             await _jSRuntime.InvokeVoidAsync("firestoreFunctions.addRobot", robot);
         }
 
+        public async Task DeleteRobot(Robot robot)
+        {
+            await _jSRuntime.InvokeVoidAsync("firestoreFunctions.deleteRobot", robot);
+        }
+
+        public async Task<List<Robot>> GetRobots()
+        {
+            return await _jSRuntime.InvokeAsync<List<Robot>>("firestoreFunctions.getRobots");
+        }
     }
 }

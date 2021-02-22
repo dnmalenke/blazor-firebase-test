@@ -19,10 +19,12 @@
         </div>
 
         <div class="content px-4">
-            @Body
-            @*<AuthorizeView>
+            <AuthorizeView>
                 <Authorized>
-                    @Body
+                    @if (_firestoreInitialized)
+                    {
+                        @Body
+                    }
                 </Authorized>
                 <NotAuthorized>
                     @if (_navManager.Uri.Contains("authentication"))
@@ -36,13 +38,16 @@
                         <p>Please Log In to Continue.</p>
                     }
                 </NotAuthorized>
-            </AuthorizeView>*@
+            </AuthorizeView>
         </div>
     </div>
 </div>
 
+<BlazoredToasts />
 
 @code {
+    private bool _firestoreInitialized = false;
+
     protected override async Task OnInitializedAsync()
     {
         var authState = await _authProvider.GetAuthenticationStateAsync();
@@ -51,6 +56,8 @@
             var s = await _storageService.GetItemAsync<AuthenticationStorage>($"oidc.user:https://accounts.google.com/:{authState.User.Identity.AuthenticationType}");
 
             await _jsRuntime.InvokeVoidAsync("firestoreFunctions.initializeFirebase", s.id_token);
+
+            _firestoreInitialized = true;
         }
     }
 
