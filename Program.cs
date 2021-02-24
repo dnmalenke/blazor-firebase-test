@@ -27,6 +27,7 @@ namespace Blazor_Firebase_Test
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
+            // Add the authentication service and read the proper appsettings.json file to retrieve settings.
             builder.Services.AddOidcAuthentication(options =>
             {
                 builder.Configuration.Bind("Local", options.ProviderOptions);

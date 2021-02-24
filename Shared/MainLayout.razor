@@ -54,6 +54,13 @@
 
     protected override async Task OnInitializedAsync()
     {
+        await InitializeFirebase();
+    }
+
+    // Initialize Firebase and Firestore in Javascript if the user is authenticated. 
+    // If the user is not authenticated, wait one second then check user's authentication state and try again.
+    private async Task InitializeFirebase()
+    {
         var authState = await _authProvider.GetAuthenticationStateAsync();
         if (authState.User.Identity.IsAuthenticated)
         {
@@ -63,9 +70,14 @@
 
             _firestoreInitialized = true;
         }
+        else
+        {
+            await Task.Delay(1000);
+            await InitializeFirebase();
+        }
     }
 
-    public class AuthenticationStorage
+    private class AuthenticationStorage
     {
         public string id_token { get; set; }
     }
